@@ -5,5 +5,6 @@
 
 # Index page just confirms the server is alive
 GET     /                           controllers.HomeController.index
+POST    /botMessage                 controllers.BotController.receiveMessage
 
       
