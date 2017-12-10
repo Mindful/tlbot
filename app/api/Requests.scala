@@ -4,7 +4,7 @@ import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.libs.json.JodaReads
 
-/*
+/* Incoming webbook
 {
   "topic": {
     "id": 208,
@@ -72,7 +72,7 @@ case class Post
 (
   id: Int,
   topicId: Int,
-  //Omitting "replyTo" because I don't know what type it is when it's not pull
+  replyTo: Option[Int],
   message: String,
   account: Account,
   // Omitting "mention" ~ "links"
@@ -80,13 +80,92 @@ case class Post
   updatedAt: DateTime
 )
 
-case class BotRequest
+case class Message //Turns out we can use this for the incoming webhook and the result of a get message call
 (
   topic: Topic,
   post: Post,
 )
 
-/*
+
+/* Response to get messages
+{
+   "mySpace":{
+      "space":{
+         "key":"8Dg5D15cEk",
+         "name":"Personal",
+         "enabled":true,
+         "imageUrl":"https://apps.nulab-inc.com/spaces/8Dg5D15cEk/photo/large"
+      },
+      "myRole":null,
+      "isPaymentAdmin":null,
+      "invitableRoles":null,
+      "myPlan":{
+         "plan":{
+            "key":"typetalk.free",
+            "name":"Free Plan",
+            "limitNumberOfUsers":10,
+            "limitTotalAttachmentSize":1073741824
+         },
+         "enabled":true,
+         "trial":null,
+         "numberOfUsers":1,
+         "totalAttachmentSize":0,
+         "createdAt":"2017-12-09T05:26:36Z",
+         "updatedAt":"2017-12-09T05:34:54Z"
+      }
+   },
+   "team":null,
+   "topic":{
+      "id":59875,
+      "name":"Testing Topic",
+      "description":"",
+      "suggestion":"Testing Topic",
+      "isDirectMessage":false,
+      "lastPostedAt":"2017-12-10T04:05:06Z",
+      "createdAt":"2017-12-09T05:34:54Z",
+      "updatedAt":"2017-12-09T05:34:54Z"
+   },
+   "post":{
+      "id":13202988,
+      "topicId":59875,
+      "replyTo":null,
+      "message":"@tlbot+ noreplyto",
+      "account":{
+         "id":55388,
+         "name":"mindfuljt",
+         "fullName":"Joshua",
+         "suggestion":"Joshua",
+         "imageUrl":"https://typetalk.com/accounts/55388/profile_image.png?t=1512797197364",
+         "isBot":false,
+         "createdAt":"2017-12-09T05:26:36Z",
+         "updatedAt":"2017-12-10T03:59:58Z"
+      },
+      "mention":{
+         "id":3198446,
+         "readAt":null
+      },
+      "attachments":[
+
+      ],
+      "likes":[
+
+      ],
+      "talks":[
+
+      ],
+      "links":[
+
+      ],
+      "createdAt":"2017-12-10T04:03:46Z",
+      "updatedAt":"2017-12-10T04:03:46Z"
+   },
+   "replies":[
+
+   ],
+   "exceedsAttachmentLimit":false
+} */
+
+/* Our outgoing response
 {
     "message":  "Hello!",
     "replyTo": 100,
@@ -110,5 +189,5 @@ object Requests {
   implicit val readsAccount = Json.reads[Account]
   implicit val readsTopic = Json.reads[Topic]
   implicit val readsPost = Json.reads[Post]
-  implicit val readsBotRequest = Json.reads[BotRequest]
+  implicit val readsTypeTalkMessage = Json.reads[Message]
 }

@@ -2,7 +2,7 @@
 #https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
 #https://github.com/github/gitignore/blob/master/PlayFramework.gitignore
 
-
+secrets.conf
 logs
 project/project
 project/target
