@@ -177,7 +177,7 @@ case class Message //Turns out we can use this for the incoming webhook and the 
 case class BotResponse
 (
   message: String,
-  replyTo: Int,
+  replyTo: Option[Int],
   fileKeys: Option[Seq[String]] = None,
   talkIds: Option[Seq[Int]] = None
 )

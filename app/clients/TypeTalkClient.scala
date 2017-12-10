@@ -1,4 +1,4 @@
-package services
+package clients
 
 import javax.inject.{Inject, Singleton}
 
