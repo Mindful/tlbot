@@ -8,6 +8,7 @@ import play.api.Logger
 import play.api.i18n.{Lang, Messages, MessagesApi, MessagesImpl}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
+import org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -62,9 +63,12 @@ class BotController @Inject()(cc: ControllerComponents, typeTalkClient: TypeTalk
     translateClient.getTextLanguage(cleanText).flatMap { sourceLanguage =>
       val targetLanguage = translateClient.otherLanguage(sourceLanguage)
       translateClient.translateText(cleanText, sourceLanguage, targetLanguage).map { translationResult =>
+        //Google translate API escapes html characters, so we have to unescape them. This also means 「 and 」will become
+        // ", but since google encodes them both as &quot we can't put them back anyway - we don't know which was which
+        val finalResult = unescapeHtml4(translationResult)
         sourceLanguage match { //https://issues.scala-lang.org/browse/SI-6476 :(
-          case Language.English => '"'+ cleanText + '"' + s" -> 「$translationResult」"
-         case Language.Japanese => s"「$cleanText」-> " + '"' + translationResult + '"'
+         case Language.English => '"'+ cleanText + '"' + s" -> 「$finalResult」"
+         case Language.Japanese => s"「$cleanText」-> " + '"' + finalResult + '"'
         }
       }
     }
@@ -74,6 +78,7 @@ class BotController @Inject()(cc: ControllerComponents, typeTalkClient: TypeTalk
     val messages: Messages = MessagesImpl(Lang(language.toString), messagesApi)
     messages(key)
   }
+
 
 
 }

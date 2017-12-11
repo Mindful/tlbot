@@ -15,4 +15,5 @@ libraryDependencies ++= Seq( jdbc , ehcache , ws , specs2 % Test , guice )
 libraryDependencies += "com.typesafe.play" %% "play-json-joda" % "2.6.0-RC1"
 libraryDependencies += "com.google.cloud" % "google-cloud-translate" % "1.12.0"
 
+
       
